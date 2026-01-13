@@ -31,15 +31,6 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
     Route::patch('/cart/{cartItem}', [CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
-    
-    Route::get('/test', function() {
-        return response()->json([
-            'status' => 'working',
-            'user' => auth()->user()->email,
-            'products_count' => \App\Models\Product::count(),
-            'cart_items_count' => auth()->user()->cartItems()->count()
-        ]);
-    })->name('test');
 });
 
 require __DIR__.'/auth.php';

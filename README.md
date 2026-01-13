@@ -21,12 +21,6 @@ A simple e-commerce shopping cart application built with Laravel, Inertia.js (Re
 - Cart items are user-specific (auth required)
 - Unique constraint on cart items (user_id, product_id)
 
-### Upcoming Features (Day 3)
-- Order/Checkout system
-- Stock deduction on order completion
-- Low stock email notifications (when stock < 5)
-- Daily sales report (scheduled job)
-
 ## Tech Stack
 
 **Backend:**
