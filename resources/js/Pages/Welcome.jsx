@@ -10,12 +10,12 @@ export default function Welcome({ auth }) {
                         <h1 className="text-4xl font-bold text-white mb-4">
                             E-commerce Shopping Cart
                         </h1>
-                        <p className="text-gray-400 mb-8">
+                        <p className="text-gray-400 mb-4">
                             Browse products, manage your cart, and shop with ease
                         </p>
                     </div>
 
-                    {auth.user ? (
+                    {auth?.user ? (
                         <div className="space-y-4">
                             <Link
                                 href={route('products.index')}
@@ -31,18 +31,20 @@ export default function Welcome({ auth }) {
                             </Link>
                         </div>
                     ) : (
-                        <div className="space-y-4">
-                            <Link
-                                href={route('register')}
-                                className="block w-full px-6 py-3 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition"
-                            >
-                                Register
-                            </Link>
+                        <div className="flex gap-4 justify-center">
                             <Link
                                 href={route('login')}
-                                className="block w-full px-6 py-3 bg-gray-800 text-white rounded-lg font-semibold hover:bg-gray-700 transition"
+                                className="px-6 py-3 rounded-lg font-semibold transition"
+                                style={{ backgroundColor: '#4F46E5', color: '#ffffff' }}
                             >
                                 Log in
+                            </Link>
+                            <Link
+                                href={route('register')}
+                                className="px-6 py-3 rounded-lg font-semibold transition"
+                                style={{ backgroundColor: '#374151', color: '#ffffff' }}
+                            >
+                                Register
                             </Link>
                         </div>
                     )}
