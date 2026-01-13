@@ -1,35 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel E-commerce Shopping Cart
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple e-commerce shopping cart application built with Laravel, Inertia.js (React), Tailwind CSS, and SQLite.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Core Functionality
+- **User Authentication** - Laravel Breeze with React
+- **Product Browsing** - Grid view with 20 sample products
+- **Shopping Cart** - Database-backed cart (no sessions or local storage)
+  - Add products to cart
+  - Update quantities
+  - Remove items
+  - Real-time total calculation
+  - Stock validation
+- **Cart Items Count** - Display in navigation header
+- **Flash Messages** - Success and error notifications
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### Business Logic
+- Stock validation (cannot add more items than available)
+- Cart items are user-specific (auth required)
+- Unique constraint on cart items (user_id, product_id)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### Upcoming Features (Day 3)
+- Order/Checkout system
+- Stock deduction on order completion
+- Low stock email notifications (when stock < 5)
+- Daily sales report (scheduled job)
 
-## Learning Laravel
+## Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+**Backend:**
+- Laravel 11.x
+- PHP 8.2+
+- SQLite Database
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+**Frontend:**
+- Inertia.js
+- React 18
+- Tailwind CSS
+- Vite
 
-## Laravel Sponsors
+**Tools:**
+- Git / GitHub
+- Composer
+- NPM
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Database Schema
+
+### Products
+- `id`, `name`, `price`, `stock_quantity`, `timestamps`
+
+### Cart Items
+- `id`, `user_id`, `product_id`, `quantity`, `timestamps`
+- Unique constraint: `(user_id, product_id)`
+
+### Users
+- Laravel Breeze default schema
+
+## Setup (Local Development)
+
+### Prerequisites
+- PHP 8.2 or higher
+- Composer
+- Node.js & NPM
+- SQLite
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/rades95/laravel-ecommerce-cart.git
+cd laravel-ecommerce-cart
+
+# Copy environment file
+cp .env.example .env
+
+# Generate application key
+php artisan key:generate
+
+# Create SQLite database
+touch database/database.sqlite
+
+# Run migrations and seeders
+php artisan migrate --seed
+
+# Seed products and admin user
+php artisan db:seed --class=ProductSeeder
+php artisan db:seed --class=AdminAndLowStockSeeder
+
+# Install frontend dependencies
+npm install
+
+# Start Vite dev server (in separate terminal)
+npm run dev
+
+# Start Laravel server
+php artisan serve
+```
+
+### Access the Application
+
+- **URL:** http://localhost:8000
+- **Register** a new user or use:
+  - **Admin:** admin@example.com / password
+
+## Project Structure
+
+```
+app/
+├── Http/Controllers/
+│   ├── CartController.php      # Cart operations (add, update, remove)
+│   └── ProductController.php   # Product listing
+├── Models/
+│   ├── Product.php             # Product model
+│   ├── CartItem.php            # Cart item model
+│   └── User.php                # User model with cart relationship
+database/
+├── migrations/
+│   ├── *_create_products_table.php
+│   └── *_create_cart_items_table.php
+└── seeders/
+    ├── ProductSeeder.php       # 20 sample products
+    └── AdminAndLowStockSeeder.php  # Admin user + low stock products
+resources/
+└── js/
+    └── Pages/
+        ├── Products/Index.jsx  # Products listing page
+        └── Cart/Index.jsx      # Shopping cart page
+```
+
+## Usage
+
+1. **Register/Login** - Create an account or login
+2. **Browse Products** - Navigate to Products page
+3. **Add to Cart** - Click "Add to Cart" on any product
+4. **View Cart** - Click "View Cart" or "Cart" in navigation
+5. **Update Quantities** - Use +/- buttons or type directly
+6. **Remove Items** - Click "Remove" button
+7. **See Total** - Total price updates automatically
+
+## Testing Data
+
+### Sample Products
+- 20 products seeded with various prices and stock levels
+- 3 products with low stock (3 items) for testing notifications:
+  - PlayStation 5
+  - Xbox Series X
+  - Canon EOS R6
+
+### Test Users
+- **Admin:** admin@example.com / password
+- **Regular users:** Register via /register
+
+## Development Notes
+
+- Cart is stored in database (not session/localStorage)
+- Stock validation prevents over-ordering
+- Flash messages provide user feedback
+- Responsive design with Tailwind CSS
+- Hot Module Replacement (HMR) with Vite
 
 ### Premium Partners
 
