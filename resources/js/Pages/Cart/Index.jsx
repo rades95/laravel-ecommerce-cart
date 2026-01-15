@@ -159,7 +159,7 @@ export default function Index({ cartItems, total }) {
 
                             <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                 <div className="p-6">
-                                    <div className="flex justify-between items-center">
+                                    <div className="flex justify-between items-center mb-6">
                                         <h3 className="text-2xl font-bold text-gray-900">
                                             Total:
                                         </h3>
@@ -167,6 +167,12 @@ export default function Index({ cartItems, total }) {
                                             ${parseFloat(total).toFixed(2)}
                                         </p>
                                     </div>
+                                    <PrimaryButton
+                                        onClick={() => router.post(route('checkout'))}
+                                        className="w-full justify-center text-lg py-4"
+                                    >
+                                        Proceed to Checkout
+                                    </PrimaryButton>
                                 </div>
                             </div>
                         </div>

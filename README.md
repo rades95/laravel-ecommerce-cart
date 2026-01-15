@@ -75,11 +75,8 @@ php artisan key:generate
 # Create SQLite database
 touch database/database.sqlite
 
-# Run migrations and seeders
+# Run migrations and seeders (includes 20 products, 3 with low stock for testing)
 php artisan migrate --seed
-
-# Seed products (includes low stock items for testing)
-php artisan db:seed --class=ProductSeeder
 
 # Install frontend dependencies
 npm install
@@ -148,6 +145,58 @@ resources/
 - Daily sales reports sent via scheduled job
 - No admin user account required - just a notification recipient
 
+## Running Background Processes
+
+### Queue Worker
+Process background jobs (email notifications):
+```bash
+php artisan queue:work
+```
+
+### Scheduler (Local Testing)
+Run scheduled tasks (daily sales report at 23:00):
+```bash
+php artisan schedule:work
+```
+
+For production, add to cron:
+```bash
+* * * * * cd /path-to-project && php artisan schedule:run >> /dev/null 2>&1
+```
+
+## Testing Key Features
+
+### 1. Shopping Cart & Checkout
+- Navigate to `/products` and add items to cart
+- Go to `/cart` and click "Proceed to Checkout"
+- Success message appears on Dashboard
+- Stock is automatically deducted
+- Cart is cleared after checkout
+
+### 2. Low Stock Email Notifications
+**Automatic:** Triggered when stock falls below 5 after checkout
+
+**Manual check:**
+```bash
+php artisan stock:check-low
+php artisan queue:work --once
+```
+
+View emails in `storage/logs/laravel.log` (search for "Low Stock Alert")
+
+### 3. Daily Sales Report
+**Manual trigger:**
+```bash
+php artisan tinker
+# Then run: App\Jobs\SendDailySalesReport::dispatch(); exit
+php artisan queue:work --once
+```
+
+View report in `storage/logs/laravel.log` (search for "Daily Sales Report")
+- Shows all products sold today with quantities
+- Total orders and revenue
+- Individual order details
+
 ## Development Notes
 
 - Cart is stored in database (not session/localStorage)
@@ -156,30 +205,9 @@ resources/
 - Responsive design with Tailwind CSS
 - Hot Module Replacement (HMR) with Vite
 - Admin notifications via `config('admin.email')`
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- Queue system uses `database` driver (jobs table)
+- Emails logged to `storage/logs/laravel.log` when using `MAIL_MAILER=log`
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+No license specified.

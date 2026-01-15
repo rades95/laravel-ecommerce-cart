@@ -62,7 +62,7 @@ class CartController extends Controller
             \Log::info('New cart item created', ['cart_item_id' => $newItem->id]);
         }
 
-        return redirect()->back()->with('success', 'Product added to cart!');
+        return redirect()->back();
     }
 
     public function update(Request $request, CartItem $cartItem)
@@ -83,7 +83,7 @@ class CartController extends Controller
             'quantity' => $request->quantity
         ]);
 
-        return redirect()->back()->with('success', 'Cart updated!');
+        return redirect()->back();
     }
 
     public function destroy(CartItem $cartItem)

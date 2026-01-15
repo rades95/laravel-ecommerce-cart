@@ -52,8 +52,18 @@ export default function Index({ products, cartItemsCount }) {
             {flash?.success && (
                 <div className="py-4">
                     <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
-                            <span className="block sm:inline">{flash.success}</span>
+                        <div className="bg-green-50 border-l-4 border-green-500 p-6 rounded-lg shadow-lg" role="alert">
+                            <div className="flex items-center">
+                                <div className="flex-shrink-0">
+                                    <svg className="h-8 w-8 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <div className="ml-4">
+                                    <h3 className="text-lg font-bold text-green-800">Order Completed Successfully! ✓</h3>
+                                    <p className="text-green-700 mt-1">{flash.success}</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
