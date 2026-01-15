@@ -78,9 +78,8 @@ touch database/database.sqlite
 # Run migrations and seeders
 php artisan migrate --seed
 
-# Seed products and admin user
+# Seed products (includes low stock items for testing)
 php artisan db:seed --class=ProductSeeder
-php artisan db:seed --class=AdminAndLowStockSeeder
 
 # Install frontend dependencies
 npm install
@@ -95,8 +94,7 @@ php artisan serve
 ### Access the Application
 
 - **URL:** http://localhost:8000
-- **Register** a new user or use:
-  - **Admin:** admin@example.com / password
+- **Register** a new user to start shopping
 
 ## Project Structure
 
@@ -114,8 +112,7 @@ database/
 │   ├── *_create_products_table.php
 │   └── *_create_cart_items_table.php
 └── seeders/
-    ├── ProductSeeder.php       # 20 sample products
-    └── AdminAndLowStockSeeder.php  # Admin user + low stock products
+    └── ProductSeeder.php       # 20 sample products (includes low stock items)
 resources/
 └── js/
     └── Pages/
@@ -143,8 +140,13 @@ resources/
   - Canon EOS R6
 
 ### Test Users
-- **Admin:** admin@example.com / password
-- **Regular users:** Register via /register
+- Register via /register or use any test account
+
+### Admin Email Configuration
+- Set `ADMIN_EMAIL` in `.env` to receive notifications
+- Low stock alerts sent when stock < 5
+- Daily sales reports sent via scheduled job
+- No admin user account required - just a notification recipient
 
 ## Development Notes
 
@@ -153,6 +155,7 @@ resources/
 - Flash messages provide user feedback
 - Responsive design with Tailwind CSS
 - Hot Module Replacement (HMR) with Vite
+- Admin notifications via `config('admin.email')`
 
 ### Premium Partners
 
